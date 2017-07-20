@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#000000">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>HOSTELBOOK</title>
+
+{#    <link rel="stylesheet" href="https://js.arcgis.com/3.21/esri/css/esri.css">#}
+{#    <script src="https://js.arcgis.com/3.21/"></script>#}
+
+
+    <link href="https://fonts.googleapis.com/css?family=Architects+Daughter|Pacifico" rel="stylesheet">
+
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://domoritz.github.io/leaflet-locatecontrol/dist/L.Control.Locate.min.css"/>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.css">
+    <link rel="stylesheet"
+          href="https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.css">
+    <link rel="stylesheet"
+          href="https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.Default.css">
+    <link rel="stylesheet"
+          href="https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-locatecontrol/v0.43.0/L.Control.Locate.css">
+    <link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/leaflet.fullscreen.css'
+          rel='stylesheet'/>
+    <link rel="stylesheet" href="{% static 'css/accordion.css' %}">
+    <link rel="stylesheet" href="{% static 'css/app.css' %}">
+    <link rel="stylesheet" href="{% static 'css/leaflet.groupedlayercontrol.css' %}">
+
+
+    {##}
+    {#    <link rel="apple-touch-icon" sizes="76x76" href="assets/img/favicon-76.png">#}
+    {#    <link rel="apple-touch-icon" sizes="120x120" href="assets/img/favicon-120.png">#}
+    {#    <link rel="apple-touch-icon" sizes="152x152" href="assets/img/favicon-152.png">#}
+    {#    <link rel="icon" sizes="196x196" href="assets/img/favicon-196.png">#}
+    {#    <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico">#}
+</head>
+
+<body class="claro">
+<div class="navbar navbar-inverse navbar-fixed-top blue" role="navigation">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <div class="navbar-icon-container">
+                <a href="#" class="navbar-icon pull-right visible-xs" id="nav-btn"><i
+                        class="fa fa-bars fa-lg white"></i></a>
+                <a href="#" class="navbar-icon pull-right visible-xs" id="sidebar-toggle-btn"><i
+                        class="fa fa-bed fa-lg white"></i></a>
+            </div>
+            <a class="navbar-brand" href="#" style="font-family:'Pacifico', cursive;text-align:center">HostelBook</a>
+        </div>
+        <div class="navbar-collapse collapse">
+            <form class="navbar-form navbar-right" role="search">
+                <div class="form-group has-feedback">
+                    <input id="searchbox" type="text" placeholder="Search" class="form-control">
+                    <span id="searchicon" class="fa fa-search form-control-feedback"></span>
+                </div>
+            </form>
+            <ul class="nav navbar-nav">
+                <li><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="about-btn "
+                       style="color:black"><i
+                        class="fa fa-info"></i>&nbsp;&nbsp;About</a></li>
+
+
+                <li class="hidden-xs"><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in"
+                                         id="list-btn" style="color:black"><i class="fa fa-list white"></i>&nbsp&nbsp;MENU</a>
+                </li>
+                <li class="hidden-xs"><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="list-btn" style="color:black"><i class="fa fa-sign-in"></i>&nbsp&nbsp;SIGN UP/LOG IN</a>
+
+                </li>
+{#                <div class="container">#}
+{#    <div class="row">#}
+{#        <div class="span12">#}
+{#    		<div class="" id="loginModal">#}
+{#              <div class="modal-header">#}
+{#                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>#}
+{#                <h3>Have an Account?</h3>#}
+{#              </div>#}
+{#            </div>#}
+{#        </div>#}
+{#	</div>#}
+{#</div>#}
+            </ul>
+        </div><!--/.navbar-collapse -->
+    </div>
+</div>
+
+<div id="container">
+    <div id="sidebar">
+        <div class="sidebar-wrapper">
+            <div class="panel panel-default" id="features">
+                <div class="panel-heading">
+                    <button type="button" class="btn btn-xs btn-default pull-right" id="sidebar-hide-btn"><i
+                            class="fa fa-hand-o-left"></i></button>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-xs-8 col-md-8">
+                            <input type="text" class="form-control search" placeholder="Filter"/>
+                        </div>
+                        <div class="col-xs-4 col-md-4">
+                            <button type="button" class="btn btn-primary pull-right" id="sort-btn">GO
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-8 col-md-8">
+                            <input type="text" class="form-control search" placeholder="Filter"/>
+                        </div>
+                        <div class="col-xs-4 col-md-4">
+                            <button type="button" class="btn btn-primary pull-right " id="sort-btn">GO
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+
+<!-- Trigger the modal with a button -->
+<button type="button" style="text-align:center;padding-left:50px;padding-right:50px;position: absolute;right: 10px;left: 30px;bottom: 10px" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">HELP</button>
+
+<!-- Modal -->
+<div id="myModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">HOW TO..</h4>
+
+<button class="accordion" style="background-color: deepskyblue;border-radius: 12px">FIND A ROOM</button>
+<div class="panel1">
+<p>In the first filter box choose the area around JKUAT that you want to view from using the drop down. Next choose the type of hostel you are
+looking for in the second filter box.ie bedsitter,single,or one-bedroom. Then click go and the map will zoom
+to the area of interest.</p></div>
+
+<button class="accordion" style="background-color: cyan;border-radius: 12px">MAKE A BOOKING</button>
+<div class="panel1">
+<p>Click on the marker of one of the hostel and a beautiful pop up showing the owner, price and other details will appear.
+Click on the book now button to book.</p></div>
+
+<button class="accordion" style="background-color: cadetblue;border-radius: 12px">CONNECT WITH OWNER</button>
+<div class="panel1">
+<p>Contacts of the owner will be provided on the pop-ups of each hostel.</p></div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+            </div>
+        </div>
+    </div>
+    {% block content %}
+    {% endblock %}
+</div>
+<!--
+    <div id="loading">
+      <div class="loading-indicator">
+        <div class="progress progress-striped active">
+          <div class="progress-bar progress-bar-info progress-bar-full"></div>
+        </div>
+      </div>
+    </div>
+-->
+
+<div class="modal fade" id="aboutModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close" type="button" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Welcome to the !</h4>
+            </div>
+            <div class="modal-body">
+                <ul class="nav nav-tabs nav-justified" id="aboutTabs">
+                    <li class="active"><a href="#about" data-toggle="tab"><i class="fa fa-question-circle"></i>&nbsp;About
+                        the project</a></li>
+                    <li><a href="#contact" data-toggle="tab"><i class="fa fa-envelope"></i>&nbsp;Contact us</a></li>
+                    <li><a href="#disclaimer" data-toggle="tab"><i class="fa fa-exclamation-circle"></i>&nbsp;Disclaimer</a>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-globe"></i>&nbsp;Metadata
+                            <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+
+                        </ul>
+                    </li>
+                </ul>
+                <div class="tab-content" id="aboutTabsContent">
+                    <div class="tab-pane fade active in" id="about">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div class="modal fade" id="legendModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Map Legend</h4>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+{#<div class="modal fade" id="loginModal" tabindex="-1" role="dialog">#}
+{#    <div class="modal-dialog modal-sm">#}
+{#        <div class="modal-content">#}
+{#            <div class="modal-header">#}
+{#                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>#}
+{#                <h4 class="modal-title">Login</h4>#}
+{#            </div>#}
+{#            <div class="modal-body">#}
+{#                <form id="contact-form">#}
+{#                    <fieldset>#}
+{#                        <div class="form-group">#}
+{#                            <label for="name">Username:</label>#}
+{#                            <input type="text" class="form-control" id="username">#}
+{#                        </div>#}
+{#                        <div class="form-group">#}
+{#                            <label for="email">Password:</label>#}
+{#                            <input type="password" class="form-control" id="password">#}
+{#                        </div>#}
+{#                    </fieldset>#}
+{#                </form>#}
+{#            </div>#}
+{#            <div class="modal-footer">#}
+{#                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>#}
+{#                <button type="submit" class="btn btn-primary" data-dismiss="modal">Login</button>#}
+{#            </div>#}
+{#        </div><!-- /.modal-content -->#}
+{#    </div><!-- /.modal-dialog -->#}
+{#</div><!-- /.modal -->#}
+<p class="popup">cuihiew</p>
+<div class="modal fade" id="featureModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close" type="button" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title text-primary" id="feature-title"></h4>
+            </div>
+            <div class="modal-body" id="feature-info"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+-- /.modal -->
+
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.10.5/typeahead.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.3/handlebars.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/list.js/1.1.1/list.min.js"></script>
+<!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.js"></script>-->
+<script src="https://unpkg.com/leaflet@1.1.0/dist/leaflet.js"></script>
+
+
+<script src="https://unpkg.com/esri-leaflet@2.0.4/dist/esri-leaflet.js"></script>
+
+<script src="https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/leaflet.markercluster.js"></script>
+<script src="https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-locatecontrol/v0.43.0/L.Control.Locate.min.js"></script>
+<script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/Leaflet.fullscreen.min.js'></script>
+<script src="https://domoritz.github.io/leaflet-locatecontrol/dist/L.Control.Locate.min.js" charset="utf-8"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.19/topojson.min.js"></script>
+
+
+
+<script src="{% static 'js/leaflet.groupedlayercontrol.js' %}"></script>
+
+<script src="{% static 'js/accordion.js' %}"></script>
+
+<script src="{% static 'js/app.js' %}"></script>
+<script src="{% static 'js/map.js' %}"></script>
+</body>
+</html>
+
+
+{#<!DOCTYPE html>#}
+{#{% load staticfiles %}#}
+{#<html lang="en">#}
+{#<head>#}
+{#    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.1.0/dist/leaflet.css"#}
+{#   integrity="sha512-wcw6ts8Anuw10Mzh9Ytw4pylW8+NAD4ch3lqm9lzAsTxg0GFeJgoAtxuCLREZSC5lUXdVyo/7yfsqFjQ4S+aKw=="#}
+{#   crossorigin=""/>#}
+{#    <!--Import Google Icon Font-->#}
+{#    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">#}
+{#    <link href="https://fonts.googleapis.com/css?family=Architects+Daughter|Pacifico" rel="stylesheet">#}
+{##}
+{#    <!--Import materialize.css-->#}
+{#    <link rel="stylesheet" href="{% static 'css/materialize.min.css'%}" media="screen,projection">#}
+{#    <link rel="stylesheet" href="{% static 'css/map.css' %}">#}
+{##}
+{#    <!--Let browser know website is optimized for mobile-->#}
+{#    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>#}
+{#    <title>Materialze</title>#}
+{#</head>#}
+{##}
+{#<body>#}
+{##}
+{#    <nav>#}
+{#        <div class="nav-wrapper blue">#}
+{#            <a href="#" class="brand-logo" style="font-family:'Pacifico', cursive">HostelBook</a>#}
+{##}
+{##}
+{#            <ul id="nav-mobile" class="right hide-on-med-and-down">#}
+{#                <li><a href="#" class="dropdown-button btn blue darken-4 pulse waves-effect waves-light btn-large"#}
+{#                       data-activates='dropdown1' style="font-family:'Architects Daughter', cursive">HOME</a>#}
+{#                </li>#}
+{#                <ul id='dropdown1' class='dropdown-content'>#}
+{#                    <li><a href="#!">Westlands</a></li>#}
+{#                    <li class="divider"></li>#}
+{#                    <li><a href="#!">Dagoretti</a></li>#}
+{#                    <li class="divider"></li>#}
+{#                    <li><a href="#!">Kasarani</a></li>#}
+{#                    <li class="divider"></li>#}
+{#                    <li><a href="#!">Langata</a></li>#}
+{#                    <li class="divider"></li>#}
+{#                    <li><a href="#!">Njiru</a></li>#}
+{#                    <li class="divider"></li>#}
+{#                    <li><a href="#!">Starehe</a></li>#}
+{#                    <li class="divider"></li>#}
+{#                    <li><a href="#!">Makadara</a></li>#}
+{#                    <li class="divider"></li>#}
+{#                    <li><a href="#!">Kamukunji</a></li>#}
+{#                    <li class="divider"></li>#}
+{#                    <li><a href="#!">Embakasi</a></li>#}
+{#                </ul>#}
+{#                <li><a href="#" class="dropdown-button pulse btn purple darken-2 waves-effect waves-light btn-large"#}
+{#                       data-activates='dropdown2' style="font-family:'Architects Daughter', cursive">LOGIN | SIGN UP</a></li>#}
+{#                <ul id='dropdown2' class='dropdown-content'>#}
+{#                    <li><a href="#!">LOG IN</a></li>#}
+{#                    <li class="divider"></li>#}
+{#                    <li><a href="#!">SIGN UP</a></li>#}
+{#                </ul>#}
+{#                <li><a href="#" class="waves-effect waves-light btn-large"#}
+{#                       style="font-family:'Architects Daughter', cursive">HELP</a></li>#}
+{##}
+{#            </ul>#}
+{#        </div>#}
+{#    </nav>#}
+{#    <div class="fixed-action-btn vertical">#}
+{#        <a class="btn-floating btn-large red">#}
+{#            <i class="large material-icons">mode_edit</i>#}
+{#        </a>#}
+{#        <ul>#}
+{#            <li><a class="btn-floating red"><i class="material-icons">insert_chart</i></a></li>#}
+{#            <li><a class="btn-floating yellow darken-1"><i class="material-icons">format_quote</i></a></li>#}
+{#            <li><a class="btn-floating green"><i class="material-icons">publish</i></a></li>#}
+{#            <li><a class="btn-floating blue"><i class="material-icons">attach_file</i></a></li>#}
+{##}
+{#        </ul>#}
+{#    </div>#}
+{##}
+{##}
+{#    {% block content %}#}
+{#    {% endblock %}#}
+{##}
+{##}
+{#<footer class="page-footer blue">#}
+{#</footer>#}
+{##}
+{##}
+{#<!--Import jQuery before materialize.js-->#}
+{#<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>#}
+{#<script src="{% static 'js/materialize.min.js' %}"></script>#}
+{##}
+{#<script src="https://unpkg.com/leaflet@1.1.0/dist/leaflet.js"#}
+{#        integrity="sha512-mNqn2Wg7tSToJhvHcqfzLMU6J4mkOImSPTxVZAdo+lcPlk+GhZmYgACEe0x35K7YzW1zJ7XyJV/TT1MrdXvMcA=="#}
+{#        crossorigin=""></script>#}
+{#<script src="{% static 'js/sidebar.js' %}"></script>#}
+{#<script src="{% static 'js/map.js' %}"></script>#}
+{##}
+{#</body>#}
+{#</html>#}
+
+
+<!--calcite-->
+{#<!DOCTYPE html>#}
+{#{% load staticfiles %}#}
+{#<html lang="en">#}
+{#<head>#}
+{#    <meta charset="utf-8">#}
+{#    <meta http-equiv="X-UA-Compatible" content="IE=edge">#}
+{#    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">#}
+{#    <meta name="description" content="Hostel booking">#}
+{#    <meta name="author" content="">#}
+{#    <link rel="icon" href="#">#}
+{#    <title>Hostel Booking </title>#}
+{##}
+{#    <!-- Calcite Maps Bootstrap -->#}
+{#    <link rel="stylesheet" href="{% static 'css/calcite-maps-bootstrap.min-v0.3.css' %}">#}
+{##}
+{#    <!-- Calcite Maps -->#}
+{#    <link rel="stylesheet" href="{% static 'css/calcite-maps-esri-leaflet.min-v0.3.css' %}">#}
+{#    <link rel="stylesheet" href="{% static 'fonts/calcite/calcite-ui.css' %}">#}
+{##}
+{#    <!-- Load Leaflet from CDN-->#}
+{#    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css"/>#}
+{#    <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet-src.js"></script>#}
+{##}
+{#    <!-- Load Esri Leaflet from CDN -->#}
+{#    <script src="https://unpkg.com/esri-leaflet@2.0.7"></script>#}
+{##}
+{#    <!-- Load Esri Leaflet Geocoder from CDN -->#}
+{#    <link rel="stylesheet" href="https://unpkg.com/esri-leaflet-geocoder@2.2.3/dist/esri-leaflet-geocoder.css">#}
+{#    <script src="https://unpkg.com/esri-leaflet-geocoder@2.2.3"></script>#}
+{#    <link rel="stylesheet" href="{% static 'css/style.css' %}">#}
+{#</head>#}
+{#<body class="calcite-maps calcite-nav-top calcite-layout-large-title">#}
+{#<!-- Navbar -->#}
+{#<nav class="navbar calcite-navbar navbar-fixed-top calcite-bg-dark calcite-text-light calcite-bgcolor-green">#}
+{#    <!-- Menu -->#}
+{#    <div class="dropdown calcite-dropdown calcite-bg-custom calcite-text-light" role="presentation">#}
+{#        <a class="dropdown-toggle" role="button" aria-haspopup="true" aria-expanded="false">#}
+{#            <div class="calcite-dropdown-toggle">#}
+{#                <span class="sr-only">Toggle dropdown menu</span>#}
+{#                <span></span>#}
+{#                <span></span>#}
+{#                <span></span>#}
+{#                <span></span>#}
+{#            </div>#}
+{#        </a>#}
+{#        <ul class="dropdown-menu calcite-bgcolor-green">#}
+{#            <li><a role="button" data-target="#panelInfo" aria-haspopup="true"><span#}
+{#                    class="glyphicon glyphicon-info-sign"></span> Info</a></li>#}
+{#            <li><a class="visible-xs" role="button" data-target="#panelSearch" aria-haspopup="true"><span#}
+{#                    class="glyphicon glyphicon-search"></span> Search</a></li>#}
+{#            <li><a role="button" data-target="#panelBasemaps" aria-haspopup="true"><span#}
+{#                    class="glyphicon glyphicon-th-large"></span> Basemaps</a></li>#}
+{#            <li><a role="button" id="calciteToggleNavbar" aria-haspopup="true"><span#}
+{#                    class="glyphicon glyphicon-fullscreen"></span> Full Map</a></li>#}
+{#        </ul>#}
+{#    </div>#}
+{#    <!-- Title -->#}
+{#    <div class="calcite-title calcite-overflow-hidden">#}
+{#        <span class="calcite-title-main">Hostel Booking</span>#}
+{#        <span class="calcite-title-divider hidden-xs"></span>#}
+{#        <span class="calcite-title-sub hidden-xs">Hostel booking app</span>#}
+{#    </div>#}
+{##}
+{#    <!--on testing side nav bar-->#}
+{#    <div class="row">#}
+{#        <div class="col-md-3"#}
+{#             style="padding-top: 70px;position: fixed;background-color:darkgreen;padding-bottom:1px;max-width: 100%">#}
+{#            <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">#}
+{#                <div class="panel panel-default">#}
+{#                    <div class="panel-heading" role="tab" id="headingOne">#}
+{#                        <h4 class="panel-title">#}
+{#                            <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne"#}
+{#                               aria-expanded="true" aria-controls="collapseOne">#}
+{#                                <div class="list-group">#}
+{#                                    GATE A#}
+{#                                </div>#}
+{#                            </a>#}
+{#                        </h4>#}
+{#                    </div>#}
+{#                    <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel"#}
+{#                         aria-labelledby="headingOne">#}
+{#                        <div class="panel-body">#}
+{#                            <ol style="font-weight: 300;font-size: 18px;text-align:left;line-height: 40px;">#}
+{#                                <li><a href="#">BAHATI HOSTELS</li>#}
+{#                                <li><a href="#">PENIEL HOSTELS</li>#}
+{#                                <li><a href="#">KAWA HOSTELS</li>#}
+{#                                <li><a href="#">PENDI HOSTELS</li>#}
+{#                                <li><a href="#">NJOHAWA HOSTELS</li>#}
+{#                                <li><a href="#">KARIBU HOSTELS</li>#}
+{#                            </ol>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+{#                <div class="panel panel-default">#}
+{#                    <div class="panel-heading" role="tab" id="headingTwo">#}
+{#                        <h4 class="panel-title">#}
+{#                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion"#}
+{#                               href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">#}
+{#                                GATE B#}
+{#                            </a>#}
+{#                        </h4>#}
+{#                    </div>#}
+{#                    <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">#}
+{#                        <div class="panel-body" style="max-width: 70px;border-left-width: 70px">#}
+{#                            <ol style="font-weight:300;text-align-all: left;font-size: 18px;line-height: 40px;">#}
+{#                                <li><a href="#">BAHATI HOSTELS</li>#}
+{#                                <li><a href="#">PENIEL HOSTELS</li>#}
+{#                                <li><a href="#">KAWA HOSTELS</li>#}
+{#                                <li><a href="#">PENDI HOSTELS</li>#}
+{#                                <li><a href="#">NJOHAWA HOSTELS</li>#}
+{#                                <li><a href="#">KARIBU HOSTELS</li>#}
+{#                            </ol>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+{#                <div class="panel panel-default">#}
+{#                    <div class="panel-heading" role="tab" id="headingThree">#}
+{#                        <h4 class="panel-title">#}
+{#                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion"#}
+{#                               href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">#}
+{#                                GATE C#}
+{#                            </a>#}
+{#                        </h4>#}
+{#                    </div>#}
+{#                    <div id="collapseThree" class="panel-collapse collapse" role="tabpanel"#}
+{#                         aria-labelledby="headingThree">#}
+{#                        <div class="panel-body">#}
+{#                            <ol style="font-weight: 300;font-size: 18px;line-height: 40px;">#}
+{#                                <li><a href="#">BAHATI HOSTELS</li>#}
+{#                                <li><a href="#">PENIEL HOSTELS</li>#}
+{#                                <li><a href="#">KAWA HOSTELS</li>#}
+{#                                <li><a href="#">PENDI HOSTELS</li>#}
+{#                                <li><a href="#">NJOHAWA HOSTELS</li>#}
+{#                                <li><a href="#">KARIBU HOSTELS</li>#}
+{#                            </ol>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
+{##}
+{#    <!-- Nav -->#}
+{#    <ul class="calcite-nav nav navbar-nav">#}
+{#        <li>#}
+{#            <div class="calcite-navbar-search hidden-xs" style="text-align: left">#}
+{#                <div id="geocode"></div>#}
+{#            </div>#}
+{#        </li>#}
+{#    </ul>#}
+{#</nav><!--/.navbar -->#}
+{#{% block content %}#}
+{#{% endblock %}#}
+{##}
+{#<!--script src="https://esri.github.io/calcite-bootstrap/scripts/vendor.js"></script-->#}
+{#<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>#}
+{#<!-- Include all plugins or individual files as needed -->#}
+{#<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>#}
+{##}
+{#<script src="{% static 'js/map.js' %}"></script>#}
+{#<script src="{% static 'js/app.js' %}"></script>#}
+{#<script src="{% static 'js/calcitemaps-v0.3.js' %}"></script>#}
+{#</body>#}
+{#</html>#}
