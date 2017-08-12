@@ -81,7 +81,7 @@ DATABASES = {
         'NAME': 'hostels_gis',
         'USER': 'postgres',
         'PASSWORD': 'postgres',
-        'HOST': 'localhost',
+#         'HOST': 'localhost',
     }
 }
 
