@@ -12,8 +12,8 @@
     <meta name="author" content="">
     <title>HOSTELBOOK</title>
 
-{#    <link rel="stylesheet" href="https://js.arcgis.com/3.21/esri/css/esri.css">#}
-{#    <script src="https://js.arcgis.com/3.21/"></script>#}
+    {#    <link rel="stylesheet" href="https://js.arcgis.com/3.21/esri/css/esri.css">#}
+    {#    <script src="https://js.arcgis.com/3.21/"></script>#}
 
 
     <link href="https://fonts.googleapis.com/css?family=Architects+Daughter|Pacifico" rel="stylesheet">
@@ -24,6 +24,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.css">
+    <link href='https://api.mapbox.com/mapbox.js/v3.1.1/mapbox.css' rel='stylesheet'/>
     <link rel="stylesheet"
           href="https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.css">
     <link rel="stylesheet"
@@ -35,14 +36,6 @@
     <link rel="stylesheet" href="{% static 'css/accordion.css' %}">
     <link rel="stylesheet" href="{% static 'css/app.css' %}">
     <link rel="stylesheet" href="{% static 'css/leaflet.groupedlayercontrol.css' %}">
-
-
-    {##}
-    {#    <link rel="apple-touch-icon" sizes="76x76" href="assets/img/favicon-76.png">#}
-    {#    <link rel="apple-touch-icon" sizes="120x120" href="assets/img/favicon-120.png">#}
-    {#    <link rel="apple-touch-icon" sizes="152x152" href="assets/img/favicon-152.png">#}
-    {#    <link rel="icon" sizes="196x196" href="assets/img/favicon-196.png">#}
-    {#    <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico">#}
 </head>
 
 <body class="claro">
@@ -73,21 +66,10 @@
                 <li class="hidden-xs"><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in"
                                          id="list-btn" style="color:black"><i class="fa fa-list white"></i>&nbsp&nbsp;MENU</a>
                 </li>
-                <li class="hidden-xs"><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="list-btn" style="color:black"><i class="fa fa-sign-in"></i>&nbsp&nbsp;SIGN UP/LOG IN</a>
+                <li class="hidden-xs"><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="list-btn"
+                                         style="color:black"><i class="fa fa-sign-in"></i>&nbsp&nbsp;SIGN UP/LOG IN</a>
 
                 </li>
-{#                <div class="container">#}
-{#    <div class="row">#}
-{#        <div class="span12">#}
-{#    		<div class="" id="loginModal">#}
-{#              <div class="modal-header">#}
-{#                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>#}
-{#                <h3>Have an Account?</h3>#}
-{#              </div>#}
-{#            </div>#}
-{#        </div>#}
-{#	</div>#}
-{#</div>#}
             </ul>
         </div><!--/.navbar-collapse -->
     </div>
@@ -124,42 +106,54 @@
 
                 </div>
 
-<!-- Trigger the modal with a button -->
-<button type="button" style="text-align:center;padding-left:50px;padding-right:50px;position: absolute;right: 10px;left: 30px;bottom: 10px" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">HELP</button>
+                <!-- Trigger the modal with a button -->
+                <button type="button"
+                        style="text-align:center;padding-left:50px;padding-right:50px;position: absolute;right: 10px;left: 30px;bottom: 10px"
+                        class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">HELP
+                </button>
 
-<!-- Modal -->
-<div id="myModal" class="modal fade" role="dialog">
-  <div class="modal-dialog">
+                <!-- Modal -->
+                <div id="myModal" class="modal fade" role="dialog">
+                    <div class="modal-dialog">
 
-    <!-- Modal content-->
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">HOW TO..</h4>
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title">HOW TO..</h4>
 
-<button class="accordion" style="background-color: deepskyblue;border-radius: 12px">FIND A ROOM</button>
-<div class="panel1">
-<p>In the first filter box choose the area around JKUAT that you want to view from using the drop down. Next choose the type of hostel you are
-looking for in the second filter box.ie bedsitter,single,or one-bedroom. Then click go and the map will zoom
-to the area of interest.</p></div>
+                                <button class="accordion" style="background-color: deepskyblue;border-radius: 12px">FIND
+                                    A ROOM
+                                </button>
+                                <div class="panel1">
+                                    <p>In the first filter box choose the area around JKUAT that you want to view from
+                                        using the drop down. Next choose the type of hostel you are
+                                        looking for in the second filter box.ie bedsitter,single,or one-bedroom. Then
+                                        click go and the map will zoom
+                                        to the area of interest.</p></div>
 
-<button class="accordion" style="background-color: cyan;border-radius: 12px">MAKE A BOOKING</button>
-<div class="panel1">
-<p>Click on the marker of one of the hostel and a beautiful pop up showing the owner, price and other details will appear.
-Click on the book now button to book.</p></div>
+                                <button class="accordion" style="background-color: cyan;border-radius: 12px">MAKE A
+                                    BOOKING
+                                </button>
+                                <div class="panel1">
+                                    <p>Click on the marker of one of the hostel and a beautiful pop up showing the
+                                        owner, price and other details will appear.
+                                        Click on the book now button to book.</p></div>
 
-<button class="accordion" style="background-color: cadetblue;border-radius: 12px">CONNECT WITH OWNER</button>
-<div class="panel1">
-<p>Contacts of the owner will be provided on the pop-ups of each hostel.</p></div>
-      </div>
+                                <button class="accordion" style="background-color: cadetblue;border-radius: 12px">
+                                    CONNECT WITH OWNER
+                                </button>
+                                <div class="panel1">
+                                    <p>Contacts of the owner will be provided on the pop-ups of each hostel.</p></div>
+                            </div>
 
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-      </div>
-    </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
 
-  </div>
-</div>
+                    </div>
+                </div>
 
             </div>
         </div>
@@ -167,15 +161,8 @@ Click on the book now button to book.</p></div>
     {% block content %}
     {% endblock %}
 </div>
-<!--
-    <div id="loading">
-      <div class="loading-indicator">
-        <div class="progress progress-striped active">
-          <div class="progress-bar progress-bar-info progress-bar-full"></div>
-        </div>
-      </div>
-    </div>
--->
+
+
 
 <div class="modal fade" id="aboutModal" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg">
@@ -281,14 +268,13 @@ Click on the book now button to book.</p></div>
 
 
 <script src="https://unpkg.com/esri-leaflet@2.0.4/dist/esri-leaflet.js"></script>
-
+<script src='https://api.mapbox.com/mapbox.js/v3.1.1/mapbox.js'></script>
 <script src="https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/leaflet.markercluster.js"></script>
 <script src="https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-locatecontrol/v0.43.0/L.Control.Locate.min.js"></script>
 <script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/Leaflet.fullscreen.min.js'></script>
 <script src="https://domoritz.github.io/leaflet-locatecontrol/dist/L.Control.Locate.min.js" charset="utf-8"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.19/topojson.min.js"></script>
-
 
 
 <script src="{% static 'js/leaflet.groupedlayercontrol.js' %}"></script>

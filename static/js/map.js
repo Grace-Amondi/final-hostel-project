@@ -1,42 +1,44 @@
-var map = L.map('map', {
-    center: [-1.09713135, 37.014170107681],
-    zoom: 15,
-    maxZoom: 17,
-    minZoom: 15
+L.mapbox.accessToken = 'pk.eyJ1IjoiZ3JhY2VhbW9uZGkiLCJhIjoiY2ozcmlydTIwMDAyOTJ3bzVsaWdvYTJ6cCJ9.kAk8OZpXt1sOPNjLo-RyOg';
+var map =L.mapbox.map('map', 'mapbox.streets')
+    .setView([-1.09713135, 37.014170107681], 15);
+
+var layer = L.mapbox.tileLayer('mapbox.streets');
+layer.on('ready', function() {
+  // the layer has been fully loaded now, and you can
+  // call .getTileJSON and investigate its properties
 });
-
-
-var layer = L.esri.basemapLayer('Imagery').addTo(map);
-var layerLabels;
-
-function setBasemap(basemap) {
-    if (layer) {
-        map.removeLayer(layer);
-    }
-
-    layer = L.esri.basemapLayer(basemap);
-
-    map.addLayer(layer);
-
-    if (layerLabels) {
-        map.removeLayer(layerLabels);
-    }
-
-    if (basemap === 'ShadedRelief'
-        || basemap === 'Gray'
-        || basemap === 'DarkGray'
-        || basemap === 'Imagery'
-        || basemap === 'Terrain'
-    ) {
-        layerLabels = L.esri.basemapLayer(basemap + 'Labels');
-        map.addLayer(layerLabels);
-    }
-}
-
-function changeBasemap(basemaps) {
-    var basemap = basemaps.value;
-    setBasemap(basemap);
-}
+// L.tileLayer('http://a.tiles.mapbox.com/v4/mapbox.mapbox-streets-v7/14/4823/6160.mvt?access_token=pk.eyJ1IjoiZ3JhY2VhbW9uZGkiLCJhIjoiY2ozcmlydTIwMDAyOTJ3bzVsaWdvYTJ6cCJ9.kAk8OZpXt1sOPNjLo-RyOg').addTo(map);
+// var layer = L.esri.basemapLayer('Imagery').addTo(map);
+// var layerLabels;
+//
+// function setBasemap(basemap) {
+//     if (layer) {
+//         map.removeLayer(layer);
+//     }
+//
+//     layer = L.esri.basemapLayer(basemap);
+//
+//     map.addLayer(layer);
+//
+//     if (layerLabels) {
+//         map.removeLayer(layerLabels);
+//     }
+//
+//     if (basemap === 'ShadedRelief'
+//         || basemap === 'Gray'
+//         || basemap === 'DarkGray'
+//         || basemap === 'Imagery'
+//         || basemap === 'Terrain'
+//     ) {
+//         layerLabels = L.esri.basemapLayer(basemap + 'Labels');
+//         map.addLayer(layerLabels);
+//     }
+// }
+//
+// function changeBasemap(basemaps) {
+//     var basemap = basemaps.value;
+//     setBasemap(basemap);
+// }
 
 // var esriStreets = L.esri.basemapLayer('Imagery').addTo(map);
 //home button
@@ -134,7 +136,7 @@ var hostel_layer = L.geoJson(null, {
     pointToLayer: function (feature, latlng) {
         return L.marker(latlng, {
             icon: L.icon({
-                iconUrl: "/static/img/youthhostel (5).png",
+                iconUrl: "/static/img/youthhostel(0).png",
                 iconSize: [24, 28],
                 iconAnchor: [12, 28],
                 popupAnchor: [0, -25]
@@ -150,8 +152,6 @@ var hostel_layer = L.geoJson(null, {
             var email = feature.properties.owner[3];
             var imgsrc = "/media/" + feature.properties.image;
             var image = "<img style='width:auto;height:auto;right: 50px' class='img-responsive' src='" + imgsrc + "'>";
-            console.log(image);
-
             var content = "<table class='table table-striped table-bordered table-condensed' >" + "<tr><th>Hostel Name</th><td>" + feature.properties.name + "</td></tr>" + "<tr><th>Owner</th><td>" + owner + "</td></tr>" + "<tr><th>CONTACTS</th><td>" + contacts + "<tr><th>EMAIL</th><td>" + email + "<tr><th>Price</th><td>" + feature.properties.price + "</td></tr>" + "<tr><th>AVAILABILTY</th><td>" + feature.properties.is_available + "</td></tr>" + "<tr><th>Type</th><td>" + feature.properties.type + "</td></tr></table>" + image;
             layer.on({
                 click: function (e) {
